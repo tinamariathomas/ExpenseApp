@@ -6,10 +6,11 @@ import (
 	"net/http"
 
 	"git.expense-app.com/ExpenseApp/config"
+	"git.expense-app.com/ExpenseApp/router"
 )
 
 func main() {
-	http.HandleFunc("/", helloWorld)
+	r := router.GetAPIRoutes()
 
 	appConfig, err := config.ReadConfig("config.json")
 	if err != nil {
@@ -17,13 +18,11 @@ func main() {
 	}
 
 	fmt.Println("Starting on port :", appConfig.Port)
-	err = http.ListenAndServe(fmt.Sprintf(":%s", appConfig.Port), nil)
+	err = http.ListenAndServe(fmt.Sprintf(":%s", appConfig.Port), r)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 
 }
 
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World"))
-}
+
