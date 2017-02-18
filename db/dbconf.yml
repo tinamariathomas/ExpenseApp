@@ -1,0 +1,4 @@
+development:
+    driver: postgres
+    open: user=***** dbname=expense_manager sslmode=disable password=*****
+
