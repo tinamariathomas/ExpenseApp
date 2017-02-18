@@ -1,0 +1,3 @@
+package: git.todo-app.com/ExpenseApp
+import:
+- package: github.com/stretchr/testify
