@@ -1,15 +1,21 @@
-hash: 9d73c8e82765a8ccd4deb8c9cb103d08b89dfb94582ae414074e0c0275b3f39c
-updated: 2017-02-18T16:03:56.759540424+05:30
+hash: 00d4742309b30c5e9e4b692d4bb562f68ca03ff1cb1001478a3cff7eb183b1ad
+updated: 2017-02-18T20:16:37.881057296+05:30
 imports:
+- name: github.com/DATA-DOG/go-sqlmock
+  version: 55ecc5a333fae40c70a7b36835c8785268589738
 - name: github.com/davecgh/go-spew
   version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
   subpackages:
   - spew
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
-  repo: https://github.com/gorilla/context
 - name: github.com/gorilla/mux
   version: 94e7d24fd285520f3d12ae998f7fdd6b5393d453
+- name: github.com/jmoiron/sqlx
+  version: f980a91bdc37abef88269b8f122d7de6352102f5
+- name: github.com/kisielk/sqlstruct
+  version: 648daed35d49dac24a4bff253b190a80da3ab6a5
+  repo: https://github.com/kisielk/sqlstruct
 - name: github.com/pmezard/go-difflib
   version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
