@@ -40,6 +40,37 @@ func TestInsertExpenseFailsForDBError(t *testing.T){
 	assert.Equal(t, 0, id)
 }
 
+func TestSelectExpenseSuccess(t *testing.T){
+
+	db, mock, err := sqlmock.New()
+	rows := sqlmock.NewRows([]string{"id","description", "amount"})
+	rows.AddRow(1521, "shoes - adidas", 4500)
+	rows.AddRow(1324, "oreo milkshake", 35)
+
+	mock.ExpectQuery(removeLines(repo.SelectExpensesQuery)).WillReturnRows(rows)
+
+	expense := repo.Expense{}
+
+	expenses, err := expense.Select(sqlx.NewDb(db, "postgres"))
+
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(expenses))
+}
+
+func TestSelectExpenseFailsForDBError(t *testing.T){
+
+	db, mock, err := sqlmock.New()
+
+	mock.ExpectQuery(removeLines(repo.SelectExpensesQuery)).WillReturnError(errors.New("For every job that must be done, there is an element of fun"))
+
+	expense := repo.Expense{}
+
+	expenses, err := expense.Select(sqlx.NewDb(db, "postgres"))
+
+	assert.Error(t, err)
+	assert.Nil(t, expenses)
+}
+
 
 func removeLines(query string) string {
 	r, err := regexp.Compile("[\n]+")

@@ -1,6 +1,8 @@
 package repo
 
-import ("github.com/jmoiron/sqlx")
+import ("github.com/jmoiron/sqlx"
+	"git.expense-app.com/ExpenseApp/models"
+)
 
 type ExpenseRepo interface{
 	Insert(db *sqlx.DB,description string, amount int) (int,error)
@@ -8,6 +10,7 @@ type ExpenseRepo interface{
 
 const(
 	InsertExpenseQuery = "INSERT INTO expense(description, amount) VALUES($1,$2) returning id"
+	SelectExpensesQuery = ""
 )
 
 type Expense struct{
@@ -27,4 +30,13 @@ func (e *Expense) Insert(db *sqlx.DB,description string, amount int) (int, error
 	}
 
 	return int(id), err
+}
+
+func (e *Expense) Select(db *sqlx.DB) ([]models.Expense, error){
+	var expenses []models.Expense
+	err := db.Select(&expenses, SelectExpensesQuery)
+	if err != nil{
+		return nil, err
+	}
+	return expenses, nil
 }
