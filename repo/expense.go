@@ -3,7 +3,7 @@ package repo
 import ("github.com/jmoiron/sqlx")
 
 type ExpenseRepo interface{
-	Insert() (int,error)
+	Insert(db *sqlx.DB,description string, amount int) (int,error)
 }
 
 const(
