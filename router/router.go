@@ -18,8 +18,11 @@ func GetAPIRoutes() *mux.Router{
 	db := openDBConnection("<username>","<db-name>","<password>")
 
 	insertExpenseHandler := h.AddExpenseHandler(expense, db)
+	getExpensesHandler := h.GetExpensesHandler(expense,db)
+
 	r.HandleFunc("/healthcheck", h.HealthCheckHandler).Methods("GET")
 	r.HandleFunc("/expense", insertExpenseHandler).Methods("POST")
+	r.HandleFunc("/expense", getExpensesHandler).Methods("GET")
 
 	return r
 }

@@ -6,11 +6,12 @@ import ("github.com/jmoiron/sqlx"
 
 type ExpenseRepo interface{
 	Insert(db *sqlx.DB,description string, amount int) (int,error)
+	Select(db *sqlx.DB) ([]models.Expense, error)
 }
 
 const(
 	InsertExpenseQuery = "INSERT INTO expense(description, amount) VALUES($1,$2) returning id"
-	SelectExpensesQuery = ""
+	SelectExpensesQuery = "SELECT * from expense"
 )
 
 type Expense struct{

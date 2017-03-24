@@ -33,3 +33,19 @@ func AddExpenseHandler(expenseRepo repo.ExpenseRepo, db *sqlx.DB) http.HandlerFu
 		w.Write(response)
 	}
 }
+
+func GetExpensesHandler(expenseRepo repo.ExpenseRepo, db *sqlx.DB) http.HandlerFunc{
+	return func(w http.ResponseWriter, r *http.Request) {
+		expenses, err := expenseRepo.Select(db)
+		if err != nil{
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		response, err := json.Marshal(expenses)
+		if err != nil{
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.Write(response)
+	}
+}
