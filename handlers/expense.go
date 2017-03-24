@@ -23,7 +23,13 @@ func AddExpenseHandler(expenseRepo repo.ExpenseRepo, db *sqlx.DB) http.HandlerFu
 		if err != nil {
 			panic(err)
 		}
-		expenseRepo.Insert(db, expense.Description, expense.Amount)
-		w.Write([]byte("Server check. I'm alive!"))
+		newID, err := expenseRepo.Insert(db, expense.Description, expense.Amount)
+		if err != nil{
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		insertedExpense := models.Expense{Id:newID, Description:expense.Description, Amount: expense.Amount}
+		response, err :=json.Marshal(insertedExpense)
+		w.Write(response)
 	}
 }

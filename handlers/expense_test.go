@@ -13,6 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/jmoiron/sqlx"
 	"bytes"
+	"errors"
+	"io/ioutil"
 )
 
 func TestInsertExpenseHandlerSuccess(t *testing.T) {
@@ -29,8 +31,34 @@ func TestInsertExpenseHandlerSuccess(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	h.AddExpenseHandler(mockExpense, mockDB)(w,r)
+	
+	insertedExpense := &models.Expense{}
+	responseBody, err := ioutil.ReadAll(w.Body)
+	require.NoError(t, err)
+
+	json.Unmarshal(responseBody, insertedExpense)
 
 	assert.Equal(t,http.StatusOK, w.Code)
+	assert.Equal(t, 123, insertedExpense.Id)
+	mockExpense.AssertExpectations(t)
+}
+
+func TestInsertExpenseHandlerFailsForDBInsert(t *testing.T) {
+	expense := models.Expense{Description:"shoes", Amount:1000}
+	mockExpense := &MockExpense{}
+	mockDB := &sqlx.DB{}
+	mockExpense.On("Insert", mockDB, "shoes",1000).Return(0, errors.New("No Luke. I am your Father"))
+
+	requestBody ,err := json.Marshal(expense)
+	require.NoError(t, err)
+
+	r, err := http.NewRequest("POST", "", bytes.NewBuffer(requestBody))
+	require.NoError(t, err)
+	w := httptest.NewRecorder()
+
+	h.AddExpenseHandler(mockExpense, mockDB)(w,r)
+
+	assert.Equal(t,http.StatusInternalServerError, w.Code)
 	mockExpense.AssertExpectations(t)
 }
 
