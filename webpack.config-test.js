@@ -5,10 +5,8 @@ module.exports = {
   externals: [nodeExternals()],
   module: {
     loaders: [
-      {
-        test: /\.test.js$/,
-        loader: "babel-loader"
-      }
+      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
     ]
   }
 };
