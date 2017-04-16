@@ -4,3 +4,4 @@ app/
 vendor/
 out/
 node_modules/
+.tmp/
